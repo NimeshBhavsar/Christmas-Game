@@ -1,9 +1,11 @@
 import './styles.css';
+import './phone.css';
 import { LEARN } from './content.de';
 import { computeAudit, ledger, LevelId, resetLedger } from './state';
 import { $ } from './ui/dom';
 import { createDialog, Speaker } from './ui/dialog';
 import { showLearnCard } from './ui/learnCard';
+import { resetStoryTime, setPhoneTheme, storyTime } from './ui/phone';
 import { isMuted, setMuted, sfx, unlockAudio } from './ui/sfx';
 import { Pt, World } from './world/world';
 import { intro } from './scenes/intro';
@@ -98,6 +100,7 @@ function go(index: number) {
   sceneRoot.innerHTML = '';
   sceneRoot.scrollTop = 0;
   sceneRoot.className = `scene-${scene.id}`;
+  setPhoneTheme(false);
   world.clearBubbles();
   world.ui.querySelectorAll('.scoreboard, .drop-zone, .end-banner, .title-screen, .floater').forEach(n => n.remove());
   world.prepare(scene.id);
@@ -121,6 +124,7 @@ function go(index: number) {
     },
     restart: () => {
       resetLedger();
+      resetStoryTime();
       world.reset();
       shownScore = 0;
       scoreEl.textContent = '0000';
@@ -151,9 +155,14 @@ muteBtn.addEventListener('click', () => { unlockAudio(); setMuted(!isMuted()); p
 paintMute();
 
 const clock = $(document, '#clock');
-const tickClock = () => { clock.textContent = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }); };
+const tickClock = () => {
+  const t = storyTime();
+  clock.textContent = t;
+  const big = document.querySelector('.lock-time');
+  if (big) big.textContent = t;
+};
 tickClock();
-setInterval(tickClock, 30_000);
+setInterval(tickClock, 5_000);
 
 // Entwickler-Abkürzung: ?scene=audit springt direkt zu einer Szene.
 const start = new URLSearchParams(location.search).get('scene');

@@ -91,15 +91,6 @@ b, strong { font-weight: 700; }
 #world { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
 #stage-ui { position: absolute; inset: 0; pointer-events: none; container-type: inline-size; overflow: hidden; }
 
-#phone { flex: 1; min-height: 0; display: flex; }
-.phone-shell { flex: 1; min-height: 0; display: flex; flex-direction: column; background: #1b1b30; }
-.phone-status {
-  flex: none; display: flex; justify-content: space-between; align-items: center;
-  padding: 4px 14px; color: #fff; font-family: var(--px-title); font-size: 8px; background: #1b1b30;
-}
-.phone-cam { width: 40px; height: 8px; background: #000; }
-.phone-screen { flex: 1; min-height: 0; position: relative; background: var(--panel); display: flex; overflow: hidden; }
-#scene { flex: 1; overflow-y: auto; overflow-x: hidden; outline: none; overscroll-behavior: contain; scroll-behavior: smooth; }
 #overlay { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
 #overlay > * { pointer-events: auto; }
 
@@ -107,12 +98,6 @@ b, strong { font-weight: 700; }
   #play { flex-direction: row; gap: 28px; padding: 20px 24px 24px; background: radial-gradient(80% 90% at 40% 30%, #15153a, #03030c); }
   #stage-wrap { flex: 1; min-width: 0; align-self: stretch; display: flex; align-items: center; justify-content: center; container-type: size; padding: 12px 12px 124px; }
   #stage { width: min(100cqw, 160cqh); box-shadow: 0 0 0 4px #000, 0 0 0 8px #2a2a55, 0 0 0 12px #000, 0 20px 60px rgb(0 0 0 / .6); }
-  #phone { flex: none; width: 390px; align-items: center; }
-  .phone-shell {
-    height: min(820px, 100%); padding: 6px 10px 14px; background: #24243e;
-    box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000, inset 0 0 0 3px #3a3a60, 0 24px 60px rgb(0 0 0 / .6);
-  }
-  .phone-status { background: #24243e; }
 }
 
 /* ================= Bühnen-Overlays ================= */
@@ -319,17 +304,6 @@ b, strong { font-weight: 700; }
 .dots i:nth-child(3) { animation-delay: .24s; }
 
 /* Sperrbildschirm & Verbinden */
-.lock { min-height: 100%; overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 22px 14px 18px; gap: 6px; background: linear-gradient(180deg, #23234a, #11112b); color: #fff; }
-.lock-time { font-family: var(--px-title); font-size: 30px; margin-top: 8px; }
-.lock-date { font-size: 15px; color: #d5d5f2; margin-bottom: 12px; font-weight: 600; }
-.lock-hint { font-family: var(--px-title); font-size: 9px; color: #b0b0e0; margin-top: auto; padding-top: 12px; text-align: center; line-height: 1.6; }
-.notifs { width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-.notif { display: flex; gap: 8px; align-items: center; min-width: 0; max-width: 100%; background: rgb(255 255 255 / .96); color: var(--ink); padding: 7px 10px; font-size: 14.5px; }
-.notif:first-child { animation: notif-in .3s var(--spring) both; }
-.notif .om-avatar { width: 20px; height: 20px; font-size: 7px; }
-.notif b { white-space: nowrap; }
-.notif span:not(.om-avatar) { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink-2); }
-.notif-more { text-align: center; font-family: var(--px-title); font-size: 9px; color: var(--gold); padding: 4px; }
 .home { padding: 14px 16px 20px; display: flex; flex-direction: column; gap: 14px; }
 .home > * { animation: rise-in .4s var(--smooth) both; }
 .home > *:nth-child(3) { animation-delay: .06s; } .home > *:nth-child(4) { animation-delay: .12s; } .home > *:nth-child(5) { animation-delay: .18s; } .home > *:nth-child(6) { animation-delay: .24s; }
@@ -342,10 +316,6 @@ b, strong { font-weight: 700; }
 .connector .txt b { display: block; font-size: 16px; }
 .connector .txt span { font-size: 13.5px; color: var(--ink-3); }
 .connector.on .txt span { color: var(--green); font-weight: 700; }
-.toggle { width: 52px; height: 28px; background: var(--panel-3); border: 0; position: relative; cursor: pointer; flex: none; box-shadow: inset 0 0 0 3px var(--ink); transition: background .2s; }
-.toggle::after { content: ''; position: absolute; top: 5px; left: 5px; width: 18px; height: 18px; background: var(--ink); transition: transform .25s var(--spring), background .2s; }
-.toggle[aria-checked="true"] { background: var(--green); }
-.toggle[aria-checked="true"]::after { transform: translateX(24px); background: #fff; }
 .donation-note { display: flex; gap: 8px; font-size: 14.5px; color: #145234; background: var(--green-soft); padding: 10px 12px; font-weight: 600; }
 
 /* Level 1 */

@@ -3,6 +3,7 @@ import { DONATION, EMAILS } from '../content.de';
 import { OM_AVATAR } from '../ui/chat';
 import { SPEAKERS } from '../ui/dialog';
 import { el, esc, wait } from '../ui/dom';
+import { MAIL_ICON, setPhoneTheme, storyTime } from '../ui/phone';
 import { sfx, unlockAudio } from '../ui/sfx';
 import { MAIN_KIDS } from '../world/world';
 
@@ -80,7 +81,7 @@ export async function intro(ctx: SceneCtx) {
   // ---------- E-Mail-Flut ----------
   MAIN_KIDS.forEach(id => (world.kid(id).pose = 'type'));
   world.santa.phone = true;
-  const notifs: string[] = [];
+  const notifs: Notif[] = [];
   const flights: Promise<void>[] = [];
   for (let i = 0; i < EMAILS.length; i++) {
     if (!ctx.isActive()) return;
@@ -89,7 +90,7 @@ export async function intro(ctx: SceneCtx) {
     const from = fromKid ? { x: k.x + 5, y: k.base - 12 } : { x: 335, y: 84 + ((i * 17) % 50) };
     flights.push(world.sendEmail(from).then(() => {
       if (!ctx.isActive()) return;
-      notifs.unshift(`<b>${esc(EMAILS[i].from)}</b><span>${esc(EMAILS[i].subject)}</span>`);
+      notifs.unshift({ from: EMAILS[i].from, subject: EMAILS[i].subject });
       lockScreen(root, notifs);
     }));
     await wait(190);
@@ -112,6 +113,7 @@ export async function intro(ctx: SceneCtx) {
   world.flash();
   world.ring(world.phonePt(), '#ffd34d', 28);
   world.sparkle(world.phonePt());
+  setPhoneTheme(false);
   root.innerHTML = `
     <section class="home">
       <div class="app-bar" style="margin:-14px -16px 0">${OM_AVATAR}<span class="app-name">OneMachine</span></div>
@@ -181,16 +183,36 @@ export async function intro(ctx: SceneCtx) {
   });
 }
 
-function lockScreen(root: HTMLElement, notifs: string[]) {
-  const shown = notifs.slice(0, 5);
-  root.innerHTML = `
-    <section class="lock">
-      <div class="lock-time">18:00</div>
-      <div class="lock-date">Dienstag, 1. Dezember</div>
-      <div class="notifs">
-        ${shown.map(n => `<div class="notif">${OM_AVATAR}${n}</div>`).join('')}
-        ${notifs.length > shown.length ? `<div class="notif-more">+${notifs.length - shown.length} weitere E-Mails</div>` : ''}
-      </div>
-      <div class="lock-hint">${notifs.length ? `📧 ${notifs.length} NEUE E-MAILS` : 'SANTAS HANDY'}</div>
-    </section>`;
+interface Notif { from: string; subject: string }
+
+/** iOS-Sperrbildschirm: Datum, große Uhr und ein Stapel Mitteilungen. */
+function lockScreen(root: HTMLElement, notifs: Notif[]) {
+  setPhoneTheme(true);
+  // So viele Mitteilungen zeigen, wie auf den Bildschirm passen – nie scrollen
+  for (let max = Math.min(5, Math.max(1, notifs.length)); max >= 1; max--) {
+    const shown = notifs.slice(0, max);
+    const rest = notifs.length - shown.length;
+    root.innerHTML = `
+      <section class="lock">
+        <div class="lock-date">Dienstag, 1. Dezember</div>
+        <div class="lock-time">${storyTime()}</div>
+        <div class="notifs" role="log" aria-label="Mitteilungen">
+          ${shown.map(n => `
+            <div class="notif">
+              <span class="notif-ico">${MAIL_ICON}</span>
+              <div class="notif-body">
+                <div class="notif-top"><b>${esc(n.from)}</b><time>jetzt</time></div>
+                <div class="notif-sub">${esc(n.subject)}</div>
+              </div>
+            </div>`).join('')}
+          ${rest > 0 ? `<div class="notif-more">+${rest} weitere E-Mails</div>` : ''}
+        </div>
+        <div class="lock-foot">
+          <span class="lock-btn" aria-hidden="true">🔦</span>
+          <span class="lock-hint">${notifs.length ? `${notifs.length} neue E-Mails` : 'Santas iPhone'}</span>
+          <span class="lock-btn" aria-hidden="true">📷</span>
+        </div>
+      </section>`;
+    if (root.scrollHeight <= root.clientHeight + 1) break;
+  }
 }

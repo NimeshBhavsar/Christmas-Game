@@ -44,10 +44,10 @@ export async function decision(ctx: SceneCtx) {
                 <span class="conf-bar" aria-hidden="true"><i style="width:${r.confidence}%"></i></span>
                 <span class="conf">${r.confidence} % passend</span>
               </div>
-              <div class="rec-actions" role="group" aria-label="${esc(r.name)}">
-                <button type="button" class="rej" aria-pressed="false">✕ Ablehnen</button>
-                <button type="button" class="acc" aria-pressed="false">✓ Annehmen</button>
-              </div>
+            </div>
+            <div class="rec-actions" role="group" aria-label="${esc(r.name)}">
+              <button type="button" class="rej" aria-pressed="false">✕ Ablehnen</button>
+              <button type="button" class="acc" aria-pressed="false">✓ Annehmen</button>
             </div>
           </div>`).join('')}
       </div>

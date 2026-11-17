@@ -1,0 +1,169 @@
+/* ================= Santas iPhone =================
+   Gehäuse, Systemleiste, Sperrbildschirm und die abgerundete App-Optik.
+   Wird nach styles.css geladen und überschreibt dort die Pixel-Rahmen der App. */
+
+/* ---------- Gehäuse: Inhalt kann das Handy nie größer machen ---------- */
+#phone { flex: 1; min-height: 0; min-width: 0; display: flex; flex-direction: column; }
+.phone-shell {
+  flex: 1; min-height: 0; min-width: 0; position: relative; display: flex; flex-direction: column;
+  padding: 7px 7px 0; border-radius: 40px 40px 0 0;
+  background: linear-gradient(145deg, #6c6d74, #2c2d32 28%, #1b1b1f 72%, #4c4d54);
+  box-shadow: inset 0 0 0 1.5px #0b0b0d, inset 0 0 0 3px rgb(255 255 255 / .12);
+}
+.phone-screen {
+  --sat: 34px; /* Höhe der Systemleiste */
+  --sab: env(safe-area-inset-bottom, 0px); /* Platz für den Home-Balken */
+  flex: 1; min-height: 0; min-width: 0; position: relative; display: flex; overflow: hidden; isolation: isolate;
+  background: var(--panel); border-radius: 33px 33px 0 0;
+}
+#scene { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overflow-x: hidden; outline: none; overscroll-behavior: contain; scroll-behavior: smooth; }
+
+/* ---------- Systemleiste, Dynamic Island, Home-Balken ---------- */
+.ios-status {
+  position: absolute; inset: 0 0 auto 0; height: var(--sat); z-index: 30; pointer-events: none;
+  display: flex; align-items: center; justify-content: space-between; padding: 4px 24px 0 28px;
+  font: 600 13px/1 -apple-system, BlinkMacSystemFont, 'SF Pro Text', var(--ui); letter-spacing: -.01em;
+  color: var(--ink); transition: color .3s; font-variant-numeric: tabular-nums;
+}
+.ios-island { position: absolute; left: 50%; top: 7px; width: 86px; height: 23px; margin-left: -43px; border-radius: 12px; background: #000; }
+.ios-island::after { content: ''; position: absolute; right: 8px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #2f4172, #0a0d1c 70%); }
+.ios-icons { display: flex; align-items: center; gap: 5px; }
+.ios-icons svg { height: 11px; width: auto; display: block; fill: currentColor; }
+.ios-home { display: none; position: absolute; left: 50%; bottom: 7px; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--ink); z-index: 30; pointer-events: none; transition: background .3s; }
+.phone-screen[data-theme="dark"] .ios-status { color: #fff; }
+.phone-screen[data-theme="dark"] .ios-home { background: #fff; }
+
+@media (min-width: 900px) {
+  #phone { flex: 0 0 372px; justify-content: center; }
+  .phone-shell {
+    flex: 0 1 790px; padding: 11px; border-radius: 58px;
+    box-shadow: inset 0 0 0 2px #0b0b0d, inset 0 0 0 4px rgb(255 255 255 / .14), 0 0 0 1px #000, 0 30px 70px rgb(0 0 0 / .6);
+  }
+  /* Seitentasten */
+  .phone-shell::before { content: ''; position: absolute; left: -3px; top: 118px; width: 3px; height: 168px; border-radius: 2px 0 0 2px; background: linear-gradient(#5a5b62 0 28px, transparent 28px 52px, #5a5b62 52px 104px, transparent 104px 116px, #5a5b62 116px 168px); }
+  .phone-shell::after { content: ''; position: absolute; right: -3px; top: 190px; width: 3px; height: 84px; border-radius: 0 2px 2px 0; background: #5a5b62; }
+  .phone-screen { --sat: 52px; --sab: 22px; border-radius: 47px; }
+  .ios-status { padding: 8px 30px 0 40px; font-size: 16px; }
+  .ios-island { top: 11px; width: 112px; height: 32px; margin-left: -56px; border-radius: 20px; }
+  .ios-island::after { right: 12px; width: 11px; height: 11px; margin-top: -5.5px; }
+  .ios-icons { gap: 6px; }
+  .ios-icons svg { height: 12.5px; }
+  .ios-home { display: block; }
+}
+
+/* ---------- Sperrbildschirm ---------- */
+.lock {
+  min-height: 100%; width: 100%; min-width: 0; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: calc(var(--sat) + 10px) 10px calc(var(--sab) + 10px); color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', var(--ui);
+  /* Hintergrundbild: unscharfe Weihnachtslichter */
+  background:
+    radial-gradient(circle at 16% 20%, rgb(255 196 92 / .42) 0 16px, transparent 58px),
+    radial-gradient(circle at 86% 27%, rgb(232 70 86 / .4) 0 22px, transparent 70px),
+    radial-gradient(circle at 74% 70%, rgb(74 208 138 / .28) 0 24px, transparent 82px),
+    radial-gradient(circle at 22% 78%, rgb(255 214 128 / .26) 0 14px, transparent 60px),
+    radial-gradient(circle at 50% 48%, rgb(120 150 255 / .16) 0 30px, transparent 110px),
+    linear-gradient(180deg, #33205c 0%, #1c1b4a 46%, #0b0b25 100%);
+}
+.lock-date { font-size: 15px; font-weight: 600; opacity: .92; }
+.lock-time { font-size: 58px; font-weight: 700; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-bottom: 10px; }
+.notifs { width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 7px; margin-top: auto; }
+.notif {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: center; min-width: 0;
+  padding: 9px 13px 9px 11px; border-radius: 20px; color: #fff;
+  background: rgb(255 255 255 / .2); border: 1px solid rgb(255 255 255 / .16);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6);
+}
+.notif:first-child { animation: notif-in .35s var(--spring) both; }
+.notif-ico { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: linear-gradient(180deg, #62cdfb, #1a7cf2); }
+.notif-ico svg { width: 24px; height: 24px; display: block; }
+.notif-body { min-width: 0; }
+.notif-top { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.notif-top b { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notif-top time { flex: none; font-size: 12.5px; opacity: .7; }
+.notif-sub { font-size: 14.5px; line-height: 1.25; opacity: .96; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notif-more {
+  align-self: center; font-size: 12.5px; font-weight: 600; padding: 5px 13px; border-radius: 999px; margin-top: 1px;
+  background: rgb(255 255 255 / .16); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+.lock-foot { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 14px 0; }
+.lock-btn { display: none; width: 46px; height: 46px; flex: none; border-radius: 50%; place-items: center; font-size: 19px; background: rgb(255 255 255 / .18); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.lock-hint { flex: 1; font-size: 12.5px; font-weight: 600; opacity: .8; text-align: center; }
+
+@media (min-width: 900px) {
+  .lock { padding: calc(var(--sat) + 22px) 14px calc(var(--sab) + 14px); }
+  .lock-date { font-size: 19px; }
+  .lock-time { font-size: 88px; margin-bottom: 14px; }
+  .notifs { gap: 8px; }
+  .notif { grid-template-columns: 38px minmax(0, 1fr); padding: 11px 14px 11px 12px; border-radius: 22px; }
+  .notif-ico { width: 38px; height: 38px; border-radius: 9px; }
+  .notif-top b, .notif-sub { font-size: 15px; }
+  .lock-foot { justify-content: space-between; padding: 14px 26px 4px; }
+  .lock-btn { display: grid; }
+}
+
+/* ---------- App-Optik: abgerundet wie die echte OneMachine-App ---------- */
+.px-box, .card, .composer, .approval, .browser, .gdoc, .inbox, .bucket, .unsure, .nudge, .flag, .gift, .connector, .ext-pop, .sheet {
+  border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 3px 0 0 var(--ink);
+}
+.approval, .bucket, .browser, .gdoc, .inbox { overflow: hidden; }
+.flag { border-width: 1.5px; box-shadow: none; border-radius: 12px; }
+.phone-screen .om-avatar { border-radius: 8px; box-shadow: 0 0 0 2px var(--ink); }
+.phone-screen .approval-head .om-avatar, .phone-screen .ext-btn .om-avatar { box-shadow: none; }
+
+.btn { border: 2px solid var(--ink); border-radius: 999px; box-shadow: 0 3px 0 0 var(--ink); min-height: 48px; }
+.btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 0 var(--ink); }
+.btn-sm { min-height: 40px; }
+.send { border-radius: 50%; box-shadow: inset 0 -3px 0 0 var(--accent-2); }
+.send.pulse::after { border-radius: 50%; }
+.chip { border-radius: 8px; }
+.cite { border-radius: 6px; }
+
+.app-bar { padding: calc(var(--sat) + 2px) 16px 9px; border-bottom: 1px solid var(--line-2, #dcdce6); }
+.app-name { font-family: var(--ui); font-weight: 800; font-size: 16.5px; letter-spacing: -.01em; }
+.mono { font-family: var(--ui); font-size: .85em; font-weight: 800; letter-spacing: .04em; }
+.composer-dock { padding-bottom: max(14px, calc(var(--sab) + 10px)); }
+.home { padding-bottom: calc(var(--sab) + 22px); }
+.donate { padding-bottom: calc(var(--sab) + 22px); }
+.endcard { padding-bottom: calc(var(--sab) + 26px); }
+.endcard .app-bar { align-self: stretch; margin: -18px -16px 6px; text-align: left; }
+.endcard h1 { font-family: var(--ui); font-weight: 800; font-size: 27px; letter-spacing: -.01em; line-height: 1.2; }
+.sheet-backdrop { padding-bottom: calc(var(--sab) + 14px); }
+.sheet { border-radius: 26px; }
+.toast { border-radius: 999px; bottom: calc(var(--sab) + 96px); }
+
+.msg-user .bubble { border-radius: 20px 20px 6px 20px; }
+.mail .av { border-radius: 50%; }
+.bucket-head .count { font-family: var(--ui); font-weight: 800; font-size: 15px; }
+.cat-choice button { border-radius: 12px; }
+.cat-choice button.suggested::after { border-radius: 6px; }
+.approval-head { font-family: var(--ui); font-weight: 800; font-size: 13px; letter-spacing: .07em; }
+.approval-head .badge { border-radius: 999px; padding: 2px 9px; font-size: 13px; }
+.stepper { border-radius: 999px; overflow: hidden; }
+.browser-bar .url { border-radius: 999px; padding: 5px 12px; }
+.ext-btn { border-radius: 12px; }
+.ext-btn.pulse::after { border-radius: 16px; }
+.lang-toggle { border-radius: 999px; overflow: hidden; }
+.gdoc-page { border-radius: 4px; }
+.insight .sw { border-radius: 4px; }
+.rec .big { border-radius: 12px; }
+.conf-bar { border-radius: 5px; overflow: hidden; }
+.rec-actions button { border-radius: 999px; }
+.gift-shelf { border-radius: 20px; }
+.donate-count { font-family: var(--ui); font-weight: 800; font-size: 14.5px; letter-spacing: .04em; }
+.automate { border-radius: 16px; }
+.donation-note { border-radius: 14px; }
+.inbox-head, .bucket-head { border-radius: 0; }
+
+/* iOS-Schalter */
+.toggle { width: 51px; height: 31px; flex: none; border: 0; border-radius: 16px; background: #d4d4dc; position: relative; cursor: pointer; transition: background .25s; }
+.toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgb(0 0 0 / .25); transition: transform .28s var(--spring); }
+.toggle[aria-checked="true"] { background: #34c759; }
+.toggle[aria-checked="true"]::after { transform: translateX(20px); }
+.toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Empfehlungen: Knöpfe über die volle Breite, damit nichts umbricht */
+.rec { display: grid; grid-template-columns: 42px minmax(0, 1fr); column-gap: 10px; row-gap: 10px; }
+.rec-actions { grid-column: 1 / -1; margin-top: 0; gap: 10px; }
+.rec-actions button, .approval-foot .btn, .cat-choice button { white-space: nowrap; }

@@ -148,6 +148,7 @@ async function endScene(ctx: SceneCtx) {
   ctx.overlay.innerHTML = '';
   ctx.root.innerHTML = `
     <section class="endcard">
+      <div class="app-bar">${OM_AVATAR}<span class="app-name">OneMachine</span></div>
       <h1>Frohe Weihnachten!</h1>
       <p class="thanks">Danke fürs Mitspielen! Du hast ${ledger.donated} ${ledger.donated === 1 ? 'Geschenk' : 'Geschenke'} in den Spendenkorb gelegt.</p>
       <p class="thanks">Für jeden Besuch spenden wir an die <span class="ngo">${esc(DONATION.ngo)}</span> in ${esc(DONATION.city)}.</p>
